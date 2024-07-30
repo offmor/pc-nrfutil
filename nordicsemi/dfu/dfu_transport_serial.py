@@ -201,7 +201,12 @@ class DfuTransportSerial(DfuTransport):
         except OSError as e:
             raise NordicSemiException("Serial port could not be opened on {0}"
               ". Reason: {1}".format(self.com_port, e.strerror))
-
+        self.serial_port.setRTS(1)
+        self.serial_port.setDTR(1)
+        self.serial_port.setRTS(0)
+        time.sleep(1)
+        self.serial_port.setDTR(0)
+        time.sleep(1)
         if self.do_ping:
             ping_success = False
             start = datetime.now()
